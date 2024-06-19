@@ -47,9 +47,21 @@ function placeTetromino(piece){
     })
 }
 
-// placeTetromino(tetrominoes[5]);
+placeTetromino(tetrominoes[5]);
+
+// remove tetromino
+function removeTetromino(piece){
+    piece.forEach(index =>{
+        // index = [x,y]
+        console.log({index})
+        console.log({startPosition})
+        getCell(index[0]+startPosition[0],index[1]+startPosition[1]).classList.remove('tetromino');
+    })
+}
+
+removeTetromino(tetrominoes[5])
 
 // place a random piece
-placeTetromino(tetrominoes[Math.floor(Math.random()*tetrominoes.length)]);
+// placeTetromino(tetrominoes[Math.floor(Math.random()*tetrominoes.length)]);
 
 
