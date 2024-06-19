@@ -35,7 +35,7 @@ const zTetromino = [[-1, 1],[0, 1],[0, 2],[1, 2]];
 const tetrominoes = [iTetromino,jTetromino,lTetromino,oTetromino,sTetromino,tTetromino,zTetromino];
 
 let startPosition = [5,0];
-let currentTetromino = tetrominoes[6];
+let currentTetromino = tetrominoes[Math.floor(Math.random()*tetrominoes.length)];
 
 //place tetromino
 function placeTetromino(piece){
@@ -47,7 +47,7 @@ function placeTetromino(piece){
     })
 }
 
-placeTetromino(tetrominoes[5]);
+// placeTetromino(tetrominoes[5]);
 
 // remove tetromino
 function removeTetromino(piece){
@@ -59,9 +59,19 @@ function removeTetromino(piece){
     })
 }
 
-removeTetromino(tetrominoes[5])
+// removeTetromino(tetrominoes[5])
 
 // place a random piece
 // placeTetromino(tetrominoes[Math.floor(Math.random()*tetrominoes.length)]);
 
+// move down one cell
+function moveDown(){
+    removeTetromino(currentTetromino);
+    currentTetromino.forEach(index=>{
+        index[1]+=1
+    })
+    placeTetromino(currentTetromino);
+}
+
+// setInterval(moveDown,1000);
 
