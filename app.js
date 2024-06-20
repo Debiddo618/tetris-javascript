@@ -51,11 +51,12 @@ function placeTetromino(piece){
 // placeTetromino(tetrominoes[5]);
 
 // remove tetromino
-function removeTetromino(piece){
-    piece.forEach(index =>{
-        // index = [x,y]
-        getCell(index[0]+startPosition[0],index[1]+startPosition[1]).classList.remove('tetromino');
-    })
+function removeTetromino(piece) {
+    for (let i = 0; i < piece.length; i++) {
+        let x = piece[i][0] + startPosition[0];
+        let y = piece[i][1] + startPosition[1];
+        getCell(x, y).classList.remove('tetromino');
+    }
 }
 
 // removeTetromino(tetrominoes[5])
@@ -78,20 +79,19 @@ function outOfBound(piece) {
 // move down one cell
 function moveDown(){
     removeTetromino(currentTetromino);
-    for (let i = 0; i < currentTetromino.length; i++) {
-        currentTetromino[i][1] += 1; // Increment y-coordinate to move down
-    }
-    // console.log(currentTetromino)
-    console.log(outOfBound(currentTetromino));
-    if(!outOfBound(currentTetromino)){
+    let newPosition = currentTetromino.map(index => [index[0], index[1] + 1]);
+    if (!outOfBound(newPosition)) {
+        currentTetromino = newPosition;
         placeTetromino(currentTetromino);
-    }else{
-        console.log("out of bound")
-        clearInterval(runGame)
+    } else {
+        clearInterval(runGame);
+        placeTetromino(currentTetromino);
     }
 }
 
 const runGame = setInterval(moveDown,1000);
+
+
 
 
 
