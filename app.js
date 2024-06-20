@@ -2,6 +2,9 @@ const gameBoard = document.querySelector('.game-board');
 const score = document.querySelector('.score');
 const start = document.querySelector('.start');
 
+const ROW = 20;
+const COL = 10;
+
 // create a game board
 function createGameBoard(board, cols, rows) {
     for (let y = 0; y < rows; y++) {
@@ -14,7 +17,7 @@ function createGameBoard(board, cols, rows) {
         }
     }
 }
-createGameBoard(gameBoard,10,20);
+createGameBoard(gameBoard,COL,ROW);
 
 // get cell by coordinate
 function getCell(x, y) {
@@ -41,8 +44,6 @@ let currentTetromino = tetrominoes[Math.floor(Math.random()*tetrominoes.length)]
 function placeTetromino(piece){
     piece.forEach(index =>{
         // index = [x,y]
-        console.log({index})
-        console.log({startPosition})
         getCell(index[0]+startPosition[0],index[1]+startPosition[1]).classList.add('tetromino');
     })
 }
@@ -53,8 +54,6 @@ function placeTetromino(piece){
 function removeTetromino(piece){
     piece.forEach(index =>{
         // index = [x,y]
-        console.log({index})
-        console.log({startPosition})
         getCell(index[0]+startPosition[0],index[1]+startPosition[1]).classList.remove('tetromino');
     })
 }
@@ -64,14 +63,37 @@ function removeTetromino(piece){
 // place a random piece
 // placeTetromino(tetrominoes[Math.floor(Math.random()*tetrominoes.length)]);
 
+// check if tetrominoes are out of bound
+function outOfBound(piece) {
+    for (let i = 0; i < piece.length; i++) {
+        let x = piece[i][0];
+        let y = piece[i][1];
+        if (x < 0 || x >= COL || y < 0 || y >= ROW) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // move down one cell
 function moveDown(){
     removeTetromino(currentTetromino);
-    currentTetromino.forEach(index=>{
-        index[1]+=1
-    })
-    placeTetromino(currentTetromino);
+    for (let i = 0; i < currentTetromino.length; i++) {
+        currentTetromino[i][1] += 1; // Increment y-coordinate to move down
+    }
+    // console.log(currentTetromino)
+    console.log(outOfBound(currentTetromino));
+    if(!outOfBound(currentTetromino)){
+        placeTetromino(currentTetromino);
+    }else{
+        console.log("out of bound")
+        clearInterval(runGame)
+    }
 }
 
-// setInterval(moveDown,1000);
+const runGame = setInterval(moveDown,1000);
+
+
+
+
 
