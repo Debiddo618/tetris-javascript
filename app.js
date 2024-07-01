@@ -141,15 +141,25 @@ function moveRight(){
     } else {
         placeTetromino(currentTetromino);
     }
-
+}
+function moveDown(){
+    console.log("moving to the Down")
+    let newPosition = currentTetromino.map(index => [index[0], index[1]+1]);
+    removeTetromino(currentTetromino);
+    console.log(newPosition);
+    if (!outOfBound(newPosition)) {
+        currentTetromino = newPosition;
+        placeTetromino(currentTetromino);
+    } else {
+        placeTetromino(currentTetromino);
+    }
 }
 
 // const runGame = setInterval(moveDown,1000);
 
 function startGame() {
-    // currentTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
-    currentTetromino = jTetromino;
-    console.log({currentTetromino})
+    currentTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
+    // currentTetromino = jTetromino;
     origin(currentTetromino);
     // placeTetromino(currentTetromino);
     runGame = setInterval(moveDown, 1000);
@@ -164,6 +174,9 @@ document.addEventListener('keydown', function(event) {
     }
     if (event.key === 'ArrowRight') {
         moveRight();
+    }
+    if (event.key === 'ArrowDown') {
+        moveDown();
     }
 });
 
