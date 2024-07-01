@@ -8,6 +8,7 @@ let startPosition = [5,0];
 // let currentTetromino = tetrominoes[Math.floor(Math.random()*tetrominoes.length)];
 let currentTetromino = null;
 let runGame = null;
+let oPiece = false;
 
 // create a game board
 function createGameBoard(board, cols, rows) {
@@ -25,20 +26,19 @@ createGameBoard(gameBoard,COL,ROW);
 
 // get cell by coordinate
 function getCell(x, y) {
-    console.log(gameBoard.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`))
     return gameBoard.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
 }
 
 const cells = Array.from(document.querySelectorAll('.cell'));
 
 // Tetrominoes
-const iTetromino = [[0, 0],[0,1],[0,2],[0,3]];
-const jTetromino = [[0, 0],[0, 1],[0, 2],[-1, 2]];
-const lTetromino = [[0, 0],[0, 1],[0, 2],[1, 2]];
+const iTetromino = [[0, 1],[0,0],[0,2],[0,3]];
+const jTetromino = [[0, 1],[0, 0],[0, 2],[-1, 2]];
+const lTetromino = [[0, 1],[0, 0],[0, 2],[1, 2]];
 const oTetromino = [[0, 0],[1, 0],[0, 1],[1, 1]];
-const sTetromino = [[-1, 1],[0, 1],[-2, 2],[-1, 2]];
-const tTetromino = [[-1, 1],[0, 1],[1, 1],[0, 2]];
-const zTetromino = [[-1, 1],[0, 1],[0, 2],[1, 2]];
+const sTetromino = [[-1, 2],[-1, 1],[0, 1],[-2, 2]];
+const tTetromino = [[0, 1],[-1, 1],[1, 1],[0, 2]];
+const zTetromino = [[0, 2],[-1, 1],[0, 1],[1, 2]];
 
 const tetrominoes = [iTetromino,jTetromino,lTetromino,oTetromino,sTetromino,tTetromino,zTetromino];
 
@@ -61,7 +61,6 @@ function placeTetromino(piece){
     })
 }
 
-// placeTetromino(tetrominoes[5]);
 
 // remove tetromino
 function removeTetromino(piece) {
@@ -72,10 +71,6 @@ function removeTetromino(piece) {
     }
 }
 
-// removeTetromino(tetrominoes[5])
-
-// place a random piece
-// placeTetromino(tetrominoes[Math.floor(Math.random()*tetrominoes.length)]);
 
 // check if tetrominoes are out of bound
 function outOfBound(piece) {
@@ -118,10 +113,8 @@ function moveDown(){
 }
 
 function moveLeft(){
-    console.log("moving to the left")
     let newPosition = currentTetromino.map(index => [index[0] - 1, index[1]]);
     removeTetromino(currentTetromino);
-    console.log(newPosition);
     if (!outOfBound(newPosition)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
@@ -131,10 +124,8 @@ function moveLeft(){
 
 }
 function moveRight(){
-    console.log("moving to the right")
     let newPosition = currentTetromino.map(index => [index[0] + 1, index[1]]);
     removeTetromino(currentTetromino);
-    console.log(newPosition);
     if (!outOfBound(newPosition)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
@@ -142,11 +133,10 @@ function moveRight(){
         placeTetromino(currentTetromino);
     }
 }
-function moveDown(){
-    console.log("moving to the Down")
+
+function dropDown(){
     let newPosition = currentTetromino.map(index => [index[0], index[1]+1]);
     removeTetromino(currentTetromino);
-    console.log(newPosition);
     if (!outOfBound(newPosition)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
@@ -155,13 +145,42 @@ function moveDown(){
     }
 }
 
-// const runGame = setInterval(moveDown,1000);
+function rotate() {
+
+  if(oPiece) return;
+  
+  // Find the center of rotation
+  const [cx, cy] = currentTetromino[0];
+
+  // Calculate the new positions after rotation
+  let newPosition = currentTetromino.map(([x, y]) => {
+      const newX = cx - (y - cy);
+      const newY = cy + (x - cx);
+      return [newX, newY];
+  });
+
+  removeTetromino(currentTetromino);
+
+  // Check if the new positions are out of bounds or collide with existing tetrominoes
+  if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
+      currentTetromino = newPosition;
+      placeTetromino(currentTetromino);
+  } else {
+      placeTetromino(currentTetromino);
+  }
+}
 
 function startGame() {
-    currentTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
-    // currentTetromino = jTetromino;
+    // currentTetromino = [].concat(tetrominoes[Math.floor(Math.random() * tetrominoes.length)]);
+    currentTetromino = [].concat(tetrominoes[3]);
+    // currentTetromino = oTetromino;
+    if(currentTetromino[0]===oTetromino[0]){
+      oPiece=true;
+    }else{
+      console.log("it is false")
+      oPiece=false;
+    }
     origin(currentTetromino);
-    // placeTetromino(currentTetromino);
     runGame = setInterval(moveDown, 1000);
 }
 
@@ -176,7 +195,10 @@ document.addEventListener('keydown', function(event) {
         moveRight();
     }
     if (event.key === 'ArrowDown') {
-        moveDown();
+        dropDown();
+    }
+    if (event.key === 'ArrowUp') {
+        rotate();
     }
 });
 
