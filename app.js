@@ -1,6 +1,8 @@
 const gameBoard = document.querySelector('.game-board');
 const scoreDisplay = document.querySelector('.score');
 const startBtn = document.querySelector('.start');
+const resetBtn = document.querySelector('.reset');
+
 
 const ROW = 20;
 const COL = 10;
@@ -224,7 +226,26 @@ function startGame() {
     runGame = setInterval(moveDown, 1000);
 }
 
+// clear game board
+function clearGameBoard() {
+    const cells = gameBoard.querySelectorAll('.cell');
+    cells.forEach(cell => {
+        cell.classList.remove('tetromino');
+    });
+}
+
+// Reset game function
+function resetGame() {
+    clearInterval(runGame);
+    score = 0;
+    updateScore();
+    clearGameBoard();
+    currentTetromino = null;
+}
+
 startBtn.addEventListener('click', startGame);
+resetBtn.addEventListener('click', resetGame);
+
 
 document.addEventListener('keydown', function(event) {
     if (event.key === 'ArrowLeft') {
