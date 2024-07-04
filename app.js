@@ -106,9 +106,11 @@ function moveDown(){
         }
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
+        checkCompleteRows();
     } else {
         clearInterval(runGame);
         placeTetromino(currentTetromino);
+        checkCompleteRows();
     }
 }
 
@@ -170,9 +172,55 @@ function rotate() {
   }
 }
 
+// Check and clear complete rows
+function checkCompleteRows() {
+  for (let y = 0; y < ROW; y++) {
+      if (isRowComplete(y)) {
+          clearRow(y);
+          console.log(gameBoard)
+      }
+  }
+}
+
+function isRowComplete(y) {
+  for (let x = 0; x < COL; x++) {
+      if (!getCell(x, y).classList.contains('tetromino')) {
+          return false;
+      }
+  }
+  return true;
+}
+
+function clearRow(y) {
+  for (let x = 0; x < COL; x++) {
+      getCell(x, y).classList.remove('tetromino');
+  }
+  shiftRowsDown(y);
+}
+
+function shiftRowsDown(fromRow) {
+  for (let y = fromRow; y > 0; y--) {
+      for (let x = 0; x < COL; x++) {
+          let currentCell = getCell(x, y);
+          let cellAbove = getCell(x, y - 1);
+          // Copy the class from the cell above
+          if (cellAbove.classList.contains('tetromino')) {
+              currentCell.classList.add('tetromino');
+              cellAbove.classList.remove('tetromino');
+          } else {
+              currentCell.classList.remove('tetromino');
+          }
+      }
+  }
+  
+  // Clear the top row
+  for (let x = 0; x < COL; x++) {
+      getCell(x, 0).classList.remove('tetromino');
+  }
+}
 function startGame() {
-    // currentTetromino = [].concat(tetrominoes[Math.floor(Math.random() * tetrominoes.length)]);
-    currentTetromino = [].concat(tetrominoes[3]);
+    currentTetromino = [].concat(tetrominoes[Math.floor(Math.random() * tetrominoes.length)]);
+    // currentTetromino = [].concat(tetrominoes[3]);
     // currentTetromino = oTetromino;
     if(currentTetromino[0]===oTetromino[0]){
       oPiece=true;
