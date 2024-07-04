@@ -44,7 +44,18 @@ const tetrominoes = [iTetromino, jTetromino, lTetromino, oTetromino, sTetromino,
 
 // Place at origin
 function origin(piece) {
-    currentTetromino = piece.map(([x, y]) => [x + startPosition[0], y + startPosition[1]]);
+    const newPiece = piece.map(([x, y]) => [x + startPosition[0], y + startPosition[1]]);
+    
+    // Check if any cell of the new piece overlaps with an existing tetromino
+    if (newPiece.some(([x, y]) => {
+        const cell = getCell(x, y);
+        return cell && cell.classList.contains('tetromino');
+    })) {
+        gameOver();
+        return;
+    }
+    
+    currentTetromino = newPiece;
     placeTetromino(currentTetromino);
 }
 
