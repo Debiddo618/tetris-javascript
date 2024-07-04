@@ -1,5 +1,5 @@
 const gameBoard = document.querySelector('.game-board');
-const score = document.querySelector('.score');
+const scoreDisplay = document.querySelector('.score');
 const startBtn = document.querySelector('.start');
 
 const ROW = 20;
@@ -9,6 +9,7 @@ let startPosition = [5,0];
 let currentTetromino = null;
 let runGame = null;
 let oPiece = false;
+let score = 0;
 
 // create a game board
 function createGameBoard(board, cols, rows) {
@@ -110,10 +111,10 @@ function moveRight(){
     }
 }
 
-function dropDown(){
-    let newPosition = currentTetromino.map(index => [index[0], index[1]+1]);
+function dropDown() {
+    const newPosition = currentTetromino.map(([x, y]) => [x, y + 1]);
     removeTetromino(currentTetromino);
-    if (!outOfBound(newPosition)) {
+    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
     } else {
@@ -191,21 +192,38 @@ function startNewTetromino() {
     origin(nextTetromino);
 }
 
+function checkGameOver(tetromino) {
+    for (let i = 0; i < tetromino.length; i++) {
+        let x = tetromino[i][0] + startPosition[0];
+        let y = tetromino[i][1] + startPosition[1];
+        if (getCell(x, y).classList.contains('tetromino')) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function gameOver() {
+    clearInterval(runGame);
+    alert('Game Over!');
+}
 
 
 
 function startGame() {
+    score = 0;
     currentTetromino = [].concat(tetrominoes[Math.floor(Math.random() * tetrominoes.length)]);
-    // currentTetromino = [].concat(tetrominoes[3]);
-    // currentTetromino = oTetromino;
-    if(currentTetromino[0]===oTetromino[0]){
-      oPiece=true;
-    }else{
-      console.log("it is false")
-      oPiece=false;
+    if (currentTetromino[0] === oTetromino[0]) {
+        oPiece = true;
+    } else {
+        oPiece = false;
     }
-    origin(currentTetromino);
-    runGame = setInterval(moveDown, 1000);
+    if (checkGameOver(currentTetromino)) {
+        gameOver();
+    } else {
+        origin(currentTetromino);
+        runGame = setInterval(moveDown, 1000);
+    }
 }
 
 
