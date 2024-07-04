@@ -94,9 +94,9 @@ function moveDown(){
 }
 
 function moveLeft(){
-    let newPosition = currentTetromino.map(index => [index[0] - 1, index[1]]);
+    const newPosition = currentTetromino.map(([x, y]) => [x - 1, y]);
     removeTetromino(currentTetromino);
-    if (!outOfBound(newPosition)) {
+    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
     } else {
@@ -105,9 +105,9 @@ function moveLeft(){
 
 }
 function moveRight(){
-    let newPosition = currentTetromino.map(index => [index[0] + 1, index[1]]);
+    const newPosition = currentTetromino.map(([x, y]) => [x + 1, y]);
     removeTetromino(currentTetromino);
-    if (!outOfBound(newPosition)) {
+    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
     } else {
