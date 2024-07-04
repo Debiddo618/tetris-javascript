@@ -45,72 +45,46 @@ const tetrominoes = [iTetromino,jTetromino,lTetromino,oTetromino,sTetromino,tTet
 
 // place at origin
 function origin(piece) {
-    for (let i = 0; i < piece.length; i++) {
-        let x = piece[i][0] + startPosition[0];
-        let y = piece[i][1] + startPosition[1];
-        currentTetromino[i]=[x,y];
-        getCell(x, y).classList.add('tetromino');
-    }
+    currentTetromino = piece.map(([x, y]) => [x + startPosition[0], y + startPosition[1]]);
+    placeTetromino(currentTetromino);
 }
 
 //place tetromino
 function placeTetromino(piece){
-    piece.forEach(index => {
-        // index = [x,y]
-        getCell(index[0],index[1]).classList.add('tetromino');
-    })
+    piece.forEach(([x, y]) => {
+        getCell(x, y).classList.add('tetromino');
+    });
 }
 
 
 // remove tetromino
 function removeTetromino(piece) {
-    for (let i = 0; i < piece.length; i++) {
-        let x = piece[i][0];
-        let y = piece[i][1];
+    piece.forEach(([x, y]) => {
         getCell(x, y).classList.remove('tetromino');
-    }
+    });
 }
 
 
 // check if tetrominoes are out of bound
 function outOfBound(piece) {
-    for (let i = 0; i < piece.length; i++) {
-        let x = piece[i][0];
-        let y = piece[i][1];
-        if (x < 0 || x >= COL || y < 0 || y >= ROW) {
-            return true;
-        }
-    }
-    return false;
+    return piece.some(([x, y]) => x < 0 || x >= COL || y >= ROW);
 }
 
 function spaceAvailable(piece){
-    for (let i = 0; i < piece.length; i++) {
-        let x = piece[i][0];
-        let y = piece[i][1];
-        if(getCell(x,y).classList.contains('tetromino')){
-            return false
-        }
-    }
-    return true;
+    return piece.every(([x, y]) => !getCell(x, y).classList.contains('tetromino'));
 }
 
 // move down one cell
 function moveDown(){
     removeTetromino(currentTetromino);
-    let newPosition = currentTetromino.map(index => [index[0], index[1] + 1]);
-    if (!outOfBound(newPosition)) {
-        if(spaceAvailable(newPosition)){
-            currentTetromino = newPosition;
-            placeTetromino(currentTetromino);
-        }
+    const newPosition = currentTetromino.map(([x, y]) => [x, y + 1]);
+    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
-        checkCompleteRows();
     } else {
-        clearInterval(runGame);
         placeTetromino(currentTetromino);
         checkCompleteRows();
+        startNewTetromino();
     }
 }
 
@@ -175,10 +149,10 @@ function rotate() {
 // Check and clear complete rows
 function checkCompleteRows() {
   for (let y = 0; y < ROW; y++) {
-      if (isRowComplete(y)) {
-          clearRow(y);
-          console.log(gameBoard)
-      }
+    if (isRowComplete(y)) {
+        clearRow(y);
+        shiftRowsDown(y);
+    }
   }
 }
 
@@ -199,25 +173,27 @@ function clearRow(y) {
 }
 
 function shiftRowsDown(fromRow) {
-  for (let y = fromRow; y > 0; y--) {
-      for (let x = 0; x < COL; x++) {
-          let currentCell = getCell(x, y);
-          let cellAbove = getCell(x, y - 1);
-          // Copy the class from the cell above
-          if (cellAbove.classList.contains('tetromino')) {
-              currentCell.classList.add('tetromino');
-              cellAbove.classList.remove('tetromino');
-          } else {
-              currentCell.classList.remove('tetromino');
-          }
-      }
-  }
-  
-  // Clear the top row
-  for (let x = 0; x < COL; x++) {
-      getCell(x, 0).classList.remove('tetromino');
-  }
+    for (let y = fromRow; y > 0; y--) {
+        for (let x = 0; x < COL; x++) {
+            const cell = getCell(x, y);
+            const cellAbove = getCell(x, y - 1);
+            cell.classList.toggle('tetromino', cellAbove.classList.contains('tetromino'));
+        }
+    }
+    for (let x = 0; x < COL; x++) {
+        getCell(x, 0).classList.remove('tetromino');
+    }
 }
+
+function startNewTetromino() {
+    const nextTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
+    oPiece = nextTetromino === oTetromino;
+    origin(nextTetromino);
+}
+
+
+
+
 function startGame() {
     currentTetromino = [].concat(tetrominoes[Math.floor(Math.random() * tetrominoes.length)]);
     // currentTetromino = [].concat(tetrominoes[3]);
