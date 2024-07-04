@@ -3,10 +3,21 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.buttons{
+    margin: 5px;
+}
+
 .game-board {
     width: 400px;
     height: 800px;
-    background-color: yellow;
     display: flex;
     flex-wrap: wrap;
 }
@@ -15,7 +26,6 @@
     border:1px solid black;
     height: 40px;
     width: 40px;
-    background-color: red;
 }
 
 .tetromino {

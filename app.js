@@ -259,6 +259,7 @@ function resetGame() {
     clearGameBoard();
     currentTetromino = null;
     isPaused = false;
+    isRunning = false;
     pauseBtn.textContent = 'Pause';
 }
 
