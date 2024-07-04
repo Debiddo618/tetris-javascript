@@ -2,6 +2,7 @@ const gameBoard = document.querySelector('.game-board');
 const scoreDisplay = document.querySelector('.score');
 const startBtn = document.querySelector('.start');
 const resetBtn = document.querySelector('.reset');
+const pauseBtn = document.querySelector('.pause');
 
 
 const ROW = 20;
@@ -11,6 +12,8 @@ let currentTetromino = null;
 let runGame = null;
 let oPiece = false;
 let score = 0;
+let isPaused = false;
+let isRunning = false;
 
 // Create a game board
 function createGameBoard(board, cols, rows) {
@@ -220,6 +223,7 @@ function checkGameOver(tetromino) {
 // Game over
 function gameOver() {
     clearInterval(runGame);
+    isRunning = false;
     alert('Game Over!');
 }
 
@@ -230,6 +234,8 @@ function updateScore() {
 
 // Start game
 function startGame() {
+    if (isRunning) return;
+    isRunning = true;
     score = 0;
     updateScore();
     currentTetromino = null;
@@ -252,23 +258,41 @@ function resetGame() {
     updateScore();
     clearGameBoard();
     currentTetromino = null;
+    isPaused = false;
+    pauseBtn.textContent = 'Pause';
 }
+
+// Pause game
+function togglePause() {
+    if (isPaused) {
+        runGame = setInterval(moveDown, 1000);
+        pauseBtn.textContent = 'Pause';
+    } else {
+        clearInterval(runGame);
+        pauseBtn.textContent = 'Resume';
+    }
+    isPaused = !isPaused;
+}
+
 
 startBtn.addEventListener('click', startGame);
 resetBtn.addEventListener('click', resetGame);
+pauseBtn.addEventListener('click', togglePause)
 
 
 document.addEventListener('keydown', function(event) {
-    if (event.key === 'ArrowLeft') {
-        moveLeft();
-    }
-    if (event.key === 'ArrowRight') {
-        moveRight();
-    }
-    if (event.key === 'ArrowDown') {
-        dropDown();
-    }
-    if (event.key === 'ArrowUp') {
-        rotate();
+    if (!isPaused) {
+        if (event.key === 'ArrowLeft') {
+            moveLeft();
+        }
+        if (event.key === 'ArrowRight') {
+            moveRight();
+        }
+        if (event.key === 'ArrowDown') {
+            dropDown();
+        }
+        if (event.key === 'ArrowUp') {
+            rotate();
+        }
     }
 });
