@@ -47,7 +47,11 @@ const tetrominoes = [iTetromino,jTetromino,lTetromino,oTetromino,sTetromino,tTet
 // place at origin
 function origin(piece) {
     currentTetromino = piece.map(([x, y]) => [x + startPosition[0], y + startPosition[1]]);
-    placeTetromino(currentTetromino);
+    if (checkGameOver(currentTetromino)) {
+        gameOver();
+    } else {
+        placeTetromino(currentTetromino);
+    }
 }
 
 //place tetromino
@@ -153,6 +157,8 @@ function checkCompleteRows() {
     if (isRowComplete(y)) {
         clearRow(y);
         shiftRowsDown(y);
+        score += 100;
+        updateScore();
     }
   }
 }
@@ -193,25 +199,27 @@ function startNewTetromino() {
 }
 
 function checkGameOver(tetromino) {
-    for (let i = 0; i < tetromino.length; i++) {
-        let x = tetromino[i][0] + startPosition[0];
-        let y = tetromino[i][1] + startPosition[1];
-        if (getCell(x, y).classList.contains('tetromino')) {
-            return true;
-        }
-    }
-    return false;
+    return tetromino.some(([x, y]) => {
+        const adjustedX = x + startPosition[0];
+        const adjustedY = y + startPosition[1];
+        const cell = getCell(adjustedX, adjustedY);
+        return cell && cell.classList.contains('tetromino');
+    });
 }
 
 function gameOver() {
     clearInterval(runGame);
     alert('Game Over!');
 }
+function updateScore() {
+    scoreDisplay.textContent = `Score: ${score}`;
+}
 
 
 
 function startGame() {
     score = 0;
+    updateScore();
     currentTetromino = [].concat(tetrominoes[Math.floor(Math.random() * tetrominoes.length)]);
     if (currentTetromino[0] === oTetromino[0]) {
         oPiece = true;
