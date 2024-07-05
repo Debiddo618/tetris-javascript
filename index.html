@@ -8,22 +8,57 @@
     <title>Tetris</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Tetris</h1>
-        <h2 class="score">Score: </h2>
-        <div class="button-bar">
-            <button class="start button">Start</button>
-            <button class="pause button">Pause</button>
-            <button class="music-button button">Play Music</button>
-            <button class="reset button">Reset Game</button>
+        <!-- Modal -->
+        <div class="modal-container">
+            <div class="modal">
+              <h1>Welcome!</h1>
+              <div class="description">
+                <div class="game-rules">
+                    <h2>Game Rules</h2>
+                    <ol>
+                        <li>Tetrominoes: The game involves different shapes called tetrominoes falling from the top of the game board to the bottom. Each tetromino is made up of four square blocks arranged in various configurations.</li>
+                        <li>Movement: Players can move the falling tetrominoes left or right using the arrow keys. They can also rotate the tetrominoes clockwise using the up arrow key to fit them into available spaces. Use the down arrow key to drop the pieces faster.</li>
+                    </ol>
+                </div>
+                <div class="objective">
+                  <h2>Objective</h2>
+                  <ol>
+                    <li>
+                        The goal is to complete horizontal lines across the game board. When a line is completed without any gaps, it disappears, and any blocks above it move down to fill the space.
+                    </li>
+                    <li>
+                        Players earn points for each completed line. 100 points per line.
+                    </li>
+                  </ol>
+                </div>
+                <div class="lose-conditions">
+                  <h2>Lose Conditions</h2>
+                  <ol>
+                    <li> The game ends when the stack of tetrominoes reaches the top of the game board, preventing new pieces from entering.</li>
+                  </ol>
+                </div>
+              </div>
+              <button class="close-modal button">Close</button>
+            </div>
         </div>
-        <div>
-            <audio id="audio" loop>
-              <source src="./audio/tetris.mp3" />
-            </audio>
-          </div>
-        <div class="game-board">
-        </div>
-    </div> 
+      
+        <div class="main-container">
+            <h1>Tetris</h1>
+            <h2 class="score">Score: 0</h2>
+            <div class="button-bar">
+                <button class="rule-button button">Rules</button>
+                <button class="start button">Start</button>
+                <button class="pause button">Pause</button>
+                <button class="music-button button">Play Music</button>
+                <button class="reset button">Reset Game</button>
+            </div>
+            <div>
+                <audio id="audio" loop>
+                <source src="./audio/tetris.mp3" />
+                </audio>
+            </div>
+            <div class="game-board">
+            </div>
+        </div> 
 </body>
 </html>

@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
-
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +7,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.container {
+.main-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,4 +49,64 @@
     &:hover {
         transform: scale(1.1);
     }
+}
+
+/* Modal */
+.modal-container,
+.results-container {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    /* display: flex; */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    background-color: #AA98A9;
+    padding: 20px;
+    z-index: 1;
+}
+
+.modal,
+.results-modal {
+    display: none;
+    position: relative;
+    background-color: var(--modal);
+    /* display: flex; */
+    flex-direction: column;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+.modal,
+.modal-container {
+    display: flex;
+    /* display: none; */
+}
+
+.close-modal,
+.close-result {
+    align-self: flex-end;
+    margin-right: 20px;
+}
+
+.lose-conditions,
+.objective,
+.game-rules {
+    margin-bottom: 10px;
+}
+
+li {
+    margin: 10px;
 }

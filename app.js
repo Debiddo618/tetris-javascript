@@ -4,6 +4,10 @@ const startBtn = document.querySelector('.start');
 const resetBtn = document.querySelector('.reset');
 const pauseBtn = document.querySelector('.pause');
 const musicBtn = document.querySelector(".music-button");
+const closeModalBtn = document.querySelector(".close-modal");
+const modal = document.querySelector(".modal");
+const modalContainer = document.querySelector(".modal-container");
+const openModalBtn = document.querySelector(".rule-button");
 
 
 
@@ -255,6 +259,7 @@ function clearGameBoard() {
     const cells = gameBoard.querySelectorAll('.cell');
     cells.forEach(cell => {
         cell.classList.remove('tetromino');
+        cell.style.backgroundColor = '';
     });
 }
 
@@ -292,6 +297,19 @@ function muteMusic() {
       musicBtn.innerText = "Play Music";
     }
 }
+
+// close modal and start the game
+closeModalBtn.addEventListener("click", () => {
+    console.log("licked")
+    modal.style.display = "none";
+    modalContainer.style.display = "none";
+});
+
+// open modal and pause the game
+openModalBtn.addEventListener("click", () => {
+    modal.style.display = "flex";
+    modalContainer.style.display = "flex";
+});
 
 musicBtn.addEventListener("click", muteMusic);
 startBtn.addEventListener('click', startGame);
