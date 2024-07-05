@@ -11,11 +11,17 @@
     <div class="container">
         <h1>Tetris</h1>
         <h2 class="score">Score: </h2>
-        <div class="buttons">
-            <button class="start">Start</button>
-            <button class="pause">Pause</button>
-            <button class="reset">Reset Game</button>
+        <div class="button-bar">
+            <button class="start button">Start</button>
+            <button class="pause button">Pause</button>
+            <button class="music-button button">Play Music</button>
+            <button class="reset button">Reset Game</button>
         </div>
+        <div>
+            <audio id="audio" loop>
+              <source src="./audio/tetris.mp3" />
+            </audio>
+          </div>
         <div class="game-board">
         </div>
     </div> 

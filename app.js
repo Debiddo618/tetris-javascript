@@ -3,6 +3,8 @@ const scoreDisplay = document.querySelector('.score');
 const startBtn = document.querySelector('.start');
 const resetBtn = document.querySelector('.reset');
 const pauseBtn = document.querySelector('.pause');
+const musicBtn = document.querySelector(".music-button");
+
 
 
 const ROW = 20;
@@ -280,7 +282,18 @@ function togglePause() {
     isPaused = !isPaused;
 }
 
+// play or mute music
+function muteMusic() {
+    if (document.querySelector("#audio").paused) {
+      document.querySelector("#audio").play();
+      musicBtn.innerText = "Mute Music";
+    } else {
+      document.querySelector("#audio").pause();
+      musicBtn.innerText = "Play Music";
+    }
+}
 
+musicBtn.addEventListener("click", muteMusic);
 startBtn.addEventListener('click', startGame);
 resetBtn.addEventListener('click', resetGame);
 pauseBtn.addEventListener('click', togglePause)
