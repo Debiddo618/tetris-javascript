@@ -35,22 +35,22 @@ function getCell(x, y) {
 }
 
 // Tetrominoes
-const iTetromino = [[0, 1], [0, 0], [0, 2], [0, 3]];
-const jTetromino = [[0, 1], [0, 0], [0, 2], [-1, 2]];
-const lTetromino = [[0, 1], [0, 0], [0, 2], [1, 2]];
-const oTetromino = [[0, 0], [1, 0], [0, 1], [1, 1]];
-const sTetromino = [[-1, 2], [-1, 1], [0, 1], [-2, 2]];
-const tTetromino = [[0, 1], [-1, 1], [1, 1], [0, 2]];
-const zTetromino = [[0, 2], [-1, 1], [0, 1], [1, 2]];
+const iTetromino = { shape: [[0, 1], [0, 0], [0, 2], [0, 3]], color: 'cyan' };
+const jTetromino = { shape: [[0, 1], [0, 0], [0, 2], [-1, 2]], color: 'blue' };
+const lTetromino = { shape: [[0, 1], [0, 0], [0, 2], [1, 2]], color: 'orange' };
+const oTetromino = { shape: [[0, 0], [1, 0], [0, 1], [1, 1]], color: 'yellow' };
+const sTetromino = { shape: [[-1, 2], [-1, 1], [0, 1], [-2, 2]], color: 'green' };
+const tTetromino = { shape: [[0, 1], [-1, 1], [1, 1], [0, 2]], color: 'purple' };
+const zTetromino = { shape: [[0, 2], [-1, 1], [0, 1], [1, 2]], color: 'red' };
 
 const tetrominoes = [iTetromino, jTetromino, lTetromino, oTetromino, sTetromino, tTetromino, zTetromino];
 
 // Place at origin
 function origin(piece) {
-    const newPiece = piece.map(([x, y]) => [x + startPosition[0], y + startPosition[1]]);
+    const newPiece = {shape:piece.shape.map(([x, y]) => [x + startPosition[0], y + startPosition[1]]), color:piece.color};
     
     // Check if any cell of the new piece overlaps with an existing tetromino
-    if (newPiece.some(([x, y]) => {
+    if (newPiece.shape.some(([x, y]) => {
         const cell = getCell(x, y);
         return cell && cell.classList.contains('tetromino');
     })) {
@@ -64,20 +64,22 @@ function origin(piece) {
 
 // Place tetromino
 function placeTetromino(piece) {
-    piece.forEach(([x, y]) => {
+    piece.shape.forEach(([x, y]) => {
         const cell = getCell(x, y);
         if (cell) {
             cell.classList.add('tetromino');
+            cell.style.backgroundColor = piece.color;
         }
     });
 }
 
 // Remove tetromino
 function removeTetromino(piece) {
-    piece.forEach(([x, y]) => {
+    piece.shape.forEach(([x, y]) => {
         const cell = getCell(x, y);
         if (cell) {
             cell.classList.remove('tetromino');
+            cell.style.backgroundColor = '';
         }
     });
 }
@@ -98,8 +100,9 @@ function spaceAvailable(piece) {
 // Move down one cell
 function moveDown() {
     removeTetromino(currentTetromino);
-    const newPosition = currentTetromino.map(([x, y]) => [x, y + 1]);
-    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
+    const newPosition = {shape:currentTetromino.shape.map(([x, y]) => [x, y + 1]),color:currentTetromino.color};
+
+    if (!outOfBound(newPosition.shape) && spaceAvailable(newPosition.shape)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
     } else {
@@ -111,9 +114,9 @@ function moveDown() {
 
 // Move left
 function moveLeft() {
-    const newPosition = currentTetromino.map(([x, y]) => [x - 1, y]);
+    const newPosition = {shape:currentTetromino.shape.map(([x, y]) => [x - 1, y]),color:currentTetromino.color};
     removeTetromino(currentTetromino);
-    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
+    if (!outOfBound(newPosition.shape) && spaceAvailable(newPosition.shape)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
     } else {
@@ -123,9 +126,9 @@ function moveLeft() {
 
 // Move right
 function moveRight() {
-    const newPosition = currentTetromino.map(([x, y]) => [x + 1, y]);
+    const newPosition = {shape:currentTetromino.shape.map(([x, y]) => [x + 1, y]),color:currentTetromino.color};
     removeTetromino(currentTetromino);
-    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
+    if (!outOfBound(newPosition.shape) && spaceAvailable(newPosition.shape)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
     } else {
@@ -135,9 +138,9 @@ function moveRight() {
 
 // Drop down
 function dropDown() {
-    const newPosition = currentTetromino.map(([x, y]) => [x, y + 1]);
+    const newPosition = {shape:currentTetromino.shape.map(([x, y]) => [x, y + 1]),color:currentTetromino.color};
     removeTetromino(currentTetromino);
-    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
+    if (!outOfBound(newPosition.shape) && spaceAvailable(newPosition.shape)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
     } else {
@@ -148,16 +151,15 @@ function dropDown() {
 // Rotate
 function rotate() {
     if (oPiece) return;
-
-    const [cx, cy] = currentTetromino[0];
-    const newPosition = currentTetromino.map(([x, y]) => {
+    const [cx, cy] = currentTetromino.shape[0];
+    const newPosition = {shape:currentTetromino.shape.map(([x, y]) => {
         const newX = cx - (y - cy);
         const newY = cy + (x - cx);
         return [newX, newY];
-    });
+    }),color:currentTetromino.color};
 
     removeTetromino(currentTetromino);
-    if (!outOfBound(newPosition) && spaceAvailable(newPosition)) {
+    if (!outOfBound(newPosition.shape) && spaceAvailable(newPosition.shape)) {
         currentTetromino = newPosition;
         placeTetromino(currentTetromino);
     } else {
@@ -190,7 +192,9 @@ function isRowComplete(y) {
 // Clear a row
 function clearRow(y) {
     for (let x = 0; x < COL; x++) {
-        getCell(x, y).classList.remove('tetromino');
+        const cell = getCell(x, y);
+        cell.classList.remove('tetromino');
+        cell.style.backgroundColor = '';
     }
 }
 
@@ -201,6 +205,7 @@ function shiftRowsDown(fromRow) {
             const cell = getCell(x, y);
             const cellAbove = getCell(x, y - 1);
             cell.classList.toggle('tetromino', cellAbove.classList.contains('tetromino'));
+            cell.style.backgroundColor = cellAbove.style.backgroundColor;
         }
     }
 }
