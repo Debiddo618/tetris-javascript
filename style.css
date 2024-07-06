@@ -110,3 +110,20 @@
 li {
     margin: 10px;
 }
+
+.result-button {
+    display: none;
+}
+
+.results {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto;
+}
+
+.results-modal h1 {
+    margin: 20px auto;
+    ;
+}

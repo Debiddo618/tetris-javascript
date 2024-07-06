@@ -9,6 +9,16 @@ const modal = document.querySelector(".modal");
 const modalContainer = document.querySelector(".modal-container");
 const openModalBtn = document.querySelector(".rule-button");
 
+const closeResultBtn = document.querySelector(".close-result");
+const openResultBtn = document.querySelector(".result-button");
+const resultModal = document.querySelector(".results-modal");
+const resultContainer = document.querySelector(".results-container");
+
+const resultMessage = document.querySelector("#result-message");
+const resultTime = document.querySelector("#result-time");
+const resultWrong = document.querySelector("#result-wrong");
+const resultCorrect = document.querySelector("#result-correct");
+const resultAccuracy = document.querySelector("#result-accuracy");
 
 
 const ROW = 20;
@@ -218,9 +228,11 @@ function shiftRowsDown(fromRow) {
 
 // Start a new tetromino
 function startNewTetromino() {
-    const nextTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
-    oPiece = nextTetromino === oTetromino;
-    origin(nextTetromino);
+    if(isRunning){
+        const nextTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
+        oPiece = nextTetromino === oTetromino;
+        origin(nextTetromino);
+    }
 }
 
 // Check game over
@@ -235,7 +247,11 @@ function checkGameOver(tetromino) {
 function gameOver() {
     clearInterval(runGame);
     isRunning = false;
-    alert('Game Over!');
+    resultMessage.innerText = `Score: ${score}`;
+    resultCorrect.innerText = score/100;
+    resultContainer.style.display = "flex";
+    resultModal.style.display = "flex";
+    openResultBtn.style.display = "inline-flex";
 }
 
 // Update score
@@ -309,6 +325,18 @@ closeModalBtn.addEventListener("click", () => {
 openModalBtn.addEventListener("click", () => {
     modal.style.display = "flex";
     modalContainer.style.display = "flex";
+});
+
+// close result modal
+closeResultBtn.addEventListener("click", () => {
+    resultContainer.style.display = "none";
+    resultModal.style.display = "none";
+});
+
+// open result modal
+openResultBtn.addEventListener("click", () => {
+resultContainer.style.display = "flex";
+resultModal.style.display = "flex";
 });
 
 musicBtn.addEventListener("click", muteMusic);
