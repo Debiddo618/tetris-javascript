@@ -317,7 +317,6 @@ function muteMusic() {
 
 // close modal and start the game
 closeModalBtn.addEventListener("click", () => {
-    console.log("licked")
     modal.style.display = "none";
     modalContainer.style.display = "none";
 });
