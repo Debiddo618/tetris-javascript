@@ -289,6 +289,7 @@ function resetGame() {
     isPaused = false;
     isRunning = false;
     pauseBtn.textContent = 'Pause';
+    openResultBtn.style.display = "none";
 }
 
 // Pause game
